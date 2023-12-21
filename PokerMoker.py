@@ -129,6 +129,11 @@ def hatRoyalFlush(karten):
     return royal_flush_werte == set(kartenwerte_eindeutig)
 
 
+# if __name__ == '__main__':
+    # main()
+
+
+
 cards = pokerDeck()
 print("Gezogene Karten:", cards)
 """
@@ -179,7 +184,7 @@ statistik = {
 }
 
 
-anzahl_zuege = 500000
+anzahl_zuege = 1000000
 
 for i in range(anzahl_zuege):
     cards = pokerDeck()
