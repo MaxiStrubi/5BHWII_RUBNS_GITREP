@@ -1,4 +1,4 @@
-from random import random, randint
+
 
 # 5 Karten ziehen
 # dann die Zahlen jeweils zu orden mit Modulo 13
@@ -11,13 +11,31 @@ from random import random, randint
 # set für nur eindeutige Elemente da Doppelte entfernt werden
 # len berechnet die Anzahl der vorhandenen farben
 
+
+
+from random import random, randint
+import functools
+import time
 from random import sample
+
+def timer(func):
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.perf_counter()
+        value = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        run_time = end_time - start_time
+        print(f"Finished {func.__name__!r} in {run_time:.4f} secs")
+        return value
+    return wrapper_timer
 
 
 def pokerDeck():
-    stappel = list(range(0, 52))
-    gezogeneKarten = sample(stappel, 5)
+    stapel = list(range(0, 52))
+    gezogeneKarten = sample(stapel, 5)
     return gezogeneKarten
+
+
 
 
 def kartenBestimmen(karteid):
@@ -129,49 +147,15 @@ def hatRoyalFlush(karten):
     return royal_flush_werte == set(kartenwerte_eindeutig)
 
 
-# if __name__ == '__main__':
-    # main()
 
 
+@timer
+def startGame():
+    cards = pokerDeck()
+    print("Gezogene Karten:", cards)
 
-cards = pokerDeck()
-print("Gezogene Karten:", cards)
-"""
-for card in cards:
-    print(kartenBestimmen(card))
 
-if hatPaar(cards):
-    print("Ein Paar vorhanden")
-else:
-    print("Kein Paar vorhanden")
-
-if hatZweiPaare(cards):
-    print("Zwei Paare vorhanden")
-else:
-    print("Keine zwei Paare vorhanden")
-
-if hatDrilling(cards):
-    print("Ein Drilling vorhanden")
-else:
-    print("Kein Drilling vorhanden")
-
-if hatStrasse(cards):
-    print("Ein Strasse vorhanden")
-else:
-    print("Kein Strasse vorhanden")
-
-if hatFlush(cards):
-    print("Ein Flush vorhanden")
-else:
-    print("Kein Flush vorhanden")
-
-if hatFullHouse(cards):
-    print("Ein FullHouse vorhanden")
-else:
-    print("Kein FullHouse vorhanden")
-"""
-
-statistik = {
+    statistik = {
     "Paar": 0,
     "Zwei Paare": 0,
     "Drilling": 0,
@@ -181,33 +165,38 @@ statistik = {
     "Four of a Kind": 0,
     "Straight Flush": 0,
     "Royal Flush": 0
-}
+    }
 
 
-anzahl_zuege = 1000000
+    anzahl_zuege = 10000
 
-for i in range(anzahl_zuege):
-    cards = pokerDeck()
-    if hatRoyalFlush(cards):
-        statistik["Royal Flush"] += 1
-    elif hatStraightFlush(cards):
-        statistik["Straight Flush"] += 1
-    elif hatFourOfAKind(cards):
-        statistik["Four of a Kind"] += 1
-    elif hatFullHouse(cards):
-        statistik["Full House"] += 1
-    elif hatFlush(cards):
-        statistik["Flush"] += 1
-    elif hatStrasse(cards):
-        statistik["Straße"] += 1
-    elif hatDrilling(cards):
-        statistik["Drilling"] += 1
-    elif hatZweiPaare(cards):
-        statistik["Zwei Paare"] += 1
-    elif hatPaar(cards):
-        statistik["Paar"] += 1
+    for i in range(anzahl_zuege):
+        cards = pokerDeck()
+        if hatRoyalFlush(cards):
+            statistik["Royal Flush"] += 1
+        elif hatStraightFlush(cards):
+            statistik["Straight Flush"] += 1
+        elif hatFourOfAKind(cards):
+            statistik["Four of a Kind"] += 1
+        elif hatFullHouse(cards):
+            statistik["Full House"] += 1
+        elif hatFlush(cards):
+            statistik["Flush"] += 1
+        elif hatStrasse(cards):
+            statistik["Straße"] += 1
+        elif hatDrilling(cards):
+            statistik["Drilling"] += 1
+        elif hatZweiPaare(cards):
+            statistik["Zwei Paare"] += 1
+        elif hatPaar(cards):
+            statistik["Paar"] += 1
 
 
-for hand, anzahl in statistik.items():
-    prozent = (anzahl / anzahl_zuege) * 100
-    print(f"{hand}: {prozent:.10f}%")
+    for hand, anzahl in statistik.items():
+        prozent = (anzahl / anzahl_zuege) * 100
+        print(f"{hand}: {prozent:.10f}%")
+
+
+
+if __name__ == '__main__':
+    startGame()
